@@ -37,7 +37,9 @@ app.use(cors({
 
 // Base API route
 app.get('/', (request, response) => {
-    response.send('Base API route');
+    response.send({
+        message: 'Base API Route'
+    });
 });
 
 // Use Express Routes
@@ -50,7 +52,6 @@ app.use(middlewares.errorHandler);
 
 // Starting server
 app.listen(port, () => {
-    // "dev": "SET NODE_ENV=development && concurrently \"cd .. && cd my-shopping-list-client && npm start\" \"nodemon server.js\""
     // eslint-disable-next-line no-console
     console.log(`Server started port on ${port}`);
 });

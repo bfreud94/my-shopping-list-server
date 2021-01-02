@@ -6,7 +6,7 @@
   "scripts": {
     "start": " cd src && node index.js",
     "client-server": "SET NODE_ENV=development && concurrently \"cd ..\\my-shopping-list-client && npm start\" \"nodemon src\\index.js\"",
-    "dev": "cd src && nodemon index.js"
+    "dev": "SET NODE_ENV=development && cd src && nodemon index.js"
   },
   "author": "Ben Freudman",
   "license": "ISC",

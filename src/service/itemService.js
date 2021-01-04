@@ -10,6 +10,10 @@ const User = require('../models/User');
 // Dotenv config
 require('dotenv').config();
 
+// Global GCS Constants
+const storage = new Storage();
+const bucketName = process.env.GOOGLE_BUCKET_NAME;
+
 const authenticateUser = async (token) => {
     try {
         const decoded = jwt.verify(token, process.env.SECRET_KEY);
@@ -52,9 +56,7 @@ const updateItem = async (userId, _id, { name, cost, dateAdded, purchaseByDate, 
 };
 
 const addItemImageToGoogleCloud = async (name, file) => {
-    const storage = new Storage();
     const googleUrl = process.env.GOOGLE_URL;
-    const bucketName = process.env.GOOGLE_BUCKET_NAME;
     const bucket = storage.bucket(bucketName);
     const buffer = Buffer.from(file.data, 'base64');
     const readable = new Readable();
@@ -73,11 +75,24 @@ const addItemImageToGoogleCloud = async (name, file) => {
     return `${googleUrl}/${bucketName}/${name}.${fileExtension}`;
 };
 
+const deleteItemImageFromGoogleCloud = async (filePath) => {
+    try {
+        const bucket = storage.bucket(bucketName);
+        const deleted = await bucket.file(filePath).delete();
+        return deleted;
+    } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+        return false;
+    }
+};
+
 module.exports = {
     addItem,
     addItemImageToGoogleCloud,
     authenticateUser,
     deleteItem,
+    deleteItemImageFromGoogleCloud,
     findItems,
     updateItem
 };

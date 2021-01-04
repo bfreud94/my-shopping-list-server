@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 // Imports for service layer
-const { addItem, addItemImageToGoogleCloud, authenticateUser, deleteItem, findItems, updateItem } = require('../service/itemService');
+const { addItem, addItemImageToGoogleCloud, deleteItemImageFromGoogleCloud, authenticateUser, deleteItem, findItems, updateItem } = require('../service/itemService');
 
 router.get('/items', async (req, res, next) => {
     try {
@@ -41,7 +41,9 @@ router.delete('/item', async (req, res, next) => {
         const authenticatedUser = await authenticateUser(req.headers.authorization);
         if (authenticatedUser) {
             const item = await deleteItem(req.query.id);
-            if (item) {
+            const itemURLSplit = item.itemURL.split('/');
+            const deletedFromGoogleCloud = await deleteItemImageFromGoogleCloud(itemURLSplit[itemURLSplit.length - 1]);
+            if (item && deletedFromGoogleCloud) {
                 res.send({ item, deleted: true });
             } else {
                 res.status(404);

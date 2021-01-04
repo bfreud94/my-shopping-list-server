@@ -4,12 +4,10 @@ const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
+const fileUpload = require('express-fileupload');
 
 // Imports for internal dependencies
 const middlewares = require('./middlewares');
-
-// Dotenv config
-require('dotenv').config();
 
 // Routes
 const itemRoutes = require('./api/items');
@@ -18,11 +16,17 @@ const userRoutes = require('./api/users');
 // Initialize express
 const app = express();
 
+// Dotenv config
+require('dotenv').config();
+
 // Port number
 const port = process.env.PORT || 8000;
 
 // Use express body parser
 app.use(express.json());
+
+// Fileupload Parser
+app.use(fileUpload());
 
 // Use Morgan
 app.use(morgan('common'));

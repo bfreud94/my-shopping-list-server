@@ -19,7 +19,8 @@ const ItemSchema = mongoose.Schema({
     cost: requiredNumber,
     dateAdded: requiredDate,
     purchaseByDate: requiredDate,
-    linkToProduct: requiredString
+    linkToProduct: requiredString,
+    itemURL: requiredString
 });
 
 module.exports = mongoose.model('items', ItemSchema);

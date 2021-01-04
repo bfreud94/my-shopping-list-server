@@ -61,15 +61,16 @@ const addItemImageToGoogleCloud = async (name, file) => {
     readable._read = () => {};
     readable.push(buffer);
     readable.push(null);
+    const fileExtension = file.name.split('.')[1];
     await new Promise((res) => readable
         .pipe(
-            bucket.file(`${name}_${file.name}`).createWriteStream({
+            bucket.file(`${name}.${fileExtension}`).createWriteStream({
                 resumable: false,
                 gzip: true
             })
         )
         .on('finish', res));
-    return `${googleUrl}/${bucketName}/${name}_${file.name}`;
+    return `${googleUrl}/${bucketName}/${name}.${fileExtension}`;
 };
 
 module.exports = {

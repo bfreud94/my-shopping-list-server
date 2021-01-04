@@ -24,7 +24,7 @@ router.post('/item', async (req, res, next) => {
     try {
         const authenticatedUser = await authenticateUser(req.headers.authorization);
         if (authenticatedUser) {
-            const itemURL = await addItemImageToGoogleCloud(req.body.name, req.files.image);
+            const itemURL = await addItemImageToGoogleCloud(req.body.name + Math.round(new Date() / 1000), req.files.image);
             const savedItem = await addItem(authenticatedUser._id, req.body, itemURL);
             res.json({ savedItem, created: true });
         } else {
